@@ -10,16 +10,15 @@ function init(){
     const cellCount = height * width;
     const cells = [];
 
-
     const minePositions = minesRand(cellCount, numMines);
-
+    
     // create game board
     function createBoard(){
         for(let i=0; i<cellCount; i++){
             const cell = document.createElement('div');
     
             cell.dataset.index = i;
-    
+  
             cell.style.height = `${100 / height}%`;
             cell.style.width = `${100 / width}%`;
     
@@ -28,11 +27,36 @@ function init(){
             
             if (minePositions[i]) {
                 cell.classList.add('mine');
-              }
+              } 
+            
         }
     }
+
+      
     createBoard();
+    addNumToAdjacentMines(cells, width, cellCount);
+    // let squares = document.querySelectorAll('div');
+    // const mine = element.classList.contains('mine');
+    // for(let i=0; i<cellCount; i++){
+        
+
+    //     if(squares[i] === mine){
+    //         squares[i].addEventListener('click', function(){
+    //             alert('Booom!!!');
+    //         })
+    //     } else {
+    //         squares[i].addEventListener('click', function(){
+    //             console.log('clicked');
+    //         })
+    //     }
+    // }
     
+    
+    // mine.addEventListener('click', function(){
+    //     alert('boom!!!');
+    // });
+    //gameOver();
+    //cells.forEach(gameOver());
 // randomize mines 
     console.log(cells);
     
@@ -43,6 +67,7 @@ function minesRand(cellCount, numMines){
 
     for (let i=0; i<numMines; i++) {
       let randomIndex = Math.floor(Math.random() * cellCount);
+        // without this often overlaps and implements less mines 
       while (minePositions[randomIndex]) {
         randomIndex = Math.floor(Math.random() * cellCount);
       }
@@ -52,8 +77,49 @@ function minesRand(cellCount, numMines){
     return minePositions;
 }
 
+function addNumToAdjacentMines(cells, width, cellCount){
+    
+    for(let i=0; i<cells.length; i++){
+        const cell = cells[i];
+        if(!cell.classList.contains('mine')){
+            let count = 0;
+            // taking string value of div index to int 
+            const cellIndex = parseInt(cell.dataset.index);
 
-const mine = element.classList.contains('mine');
+        // checking board if board edges
+            const isLeftEdge = (cellIndex % width === 0);
+            const isRightEdge = (cellIndex % width === width -1);
+            const isTopEdge = (cellIndex < width);
+            const isBottomEdge = (cellIndex >= cellCount - width);
+
+        // checking neighboring squares 
+            if(!isLeftEdge && cells[cellIndex - 1].classList.contains('mine')) count++;
+            if(!isRightEdge && cells[cellIndex + 1].classList.contains('mine')) count++;
+            if(!isTopEdge && cells[cellIndex - width].classList.contains('mine')) count++;
+            if(!isBottomEdge && cells[cellIndex + width].classList.contains('mine')) count++;
+        
+        // squares on diagonal 
+            if(!isTopEdge && !isLeftEdge && cells[cellIndex - width - 1].classList.contains('mine')) count++;
+            if(!isTopEdge && !isRightEdge && cells[cellIndex - width + 1].classList.contains('mine')) count++;
+            if(!isBottomEdge && !isLeftEdge && cells[cellIndex + width -1].classList.contains('mine')) count++;
+            if(!isBottomEdge && !isRightEdge && cells[cellIndex + width + 1].classList.contains('mine')) count++;
+
+            if(count > 0){
+                cell.textContent = count;
+            } 
+        }
+    }
+}
+// function gameOver(){
+//     const mine = element.classList.contains('mine');
+//     mine.addEventListener('click', function(){
+//         alert('boom!!!');
+//     });
+// }
+// function adjacentMinesNum(){
+    
+// }
+// const mine = element.classList.contains('mine');
 // randomize mines placement on the given board 
 // using Math.random and add it to the boards of divs using array
 
