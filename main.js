@@ -35,28 +35,16 @@ function init(){
       
     createBoard();
     addNumToAdjacentMines(cells, width, cellCount);
-    // let squares = document.querySelectorAll('div');
-    // const mine = element.classList.contains('mine');
-    // for(let i=0; i<cellCount; i++){
-        
-
-    //     if(squares[i] === mine){
-    //         squares[i].addEventListener('click', function(){
-    //             alert('Booom!!!');
-    //         })
-    //     } else {
-    //         squares[i].addEventListener('click', function(){
-    //             console.log('clicked');
-    //         })
-    //     }
-    // }
+    
+    // event listener to the bomb 
+    let squares = document.querySelectorAll('div');
+    for(let i=0; i<squares.length; i++){
+        squares[i].addEventListener('click', function(){
+            gameOver(squares[i]);
+        })
+    }
     
     
-    // mine.addEventListener('click', function(){
-    //     alert('boom!!!');
-    // });
-    //gameOver();
-    //cells.forEach(gameOver());
 // randomize mines 
     console.log(cells);
     
@@ -104,10 +92,17 @@ function addNumToAdjacentMines(cells, width, cellCount){
             if(!isBottomEdge && !isLeftEdge && cells[cellIndex + width -1].classList.contains('mine')) count++;
             if(!isBottomEdge && !isRightEdge && cells[cellIndex + width + 1].classList.contains('mine')) count++;
 
-            if(count > 0){
-                cell.textContent = count;
-            } 
+            if(count > 0) cell.textContent = count;
+            
         }
+    }
+}
+
+function gameOver(square){
+    if(square.classList.contains('mine')){
+        alert('gameover');
+    } else {
+        console.log('clicked');
     }
 }
 // function gameOver(){
