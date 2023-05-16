@@ -1,5 +1,9 @@
 
 
+
+// global array 
+const mineCounts = [];
+//const minePositions = [];
 function init(){
     // selecting the elements from html 
     const board = document.querySelector('.inner-board');
@@ -9,25 +13,32 @@ function init(){
     const width = 10;
     const cellCount = height * width;
     const cells = [];
-
+    
     const minePositions = minesRand(cellCount, numMines);
     
     // create game board
     function createBoard(){
+
+        
+
         for(let i=0; i<cellCount; i++){
             const cell = document.createElement('div');
-    
+            
             cell.dataset.index = i;
   
             cell.style.height = `${100 / height}%`;
             cell.style.width = `${100 / width}%`;
-    
+            
+
             board.appendChild(cell);
             cells.push(cell);
             
+            // adding mine 
             if (minePositions[i]) {
                 cell.classList.add('mine');
               } 
+
+
             
         }
     }
@@ -35,6 +46,18 @@ function init(){
       
     createBoard();
     addNumToAdjacentMines(cells, width, cellCount);
+    
+
+    console.log(mineCounts);
+
+    // adding event listeners to the global array 
+    mineCounts.forEach((count, index) => {
+        if(count !== 'mine'){
+            cells[index].addEventListener('click', function(){
+                revealCell(cells[index], index, cells, width, cellCount);
+            })
+        }
+    })
     
     // event listener to the bomb 
     let squares = document.querySelectorAll('div');
@@ -44,7 +67,6 @@ function init(){
         })
     }
     
-    
 // randomize mines 
     console.log(cells);
     
@@ -53,8 +75,10 @@ function init(){
 function minesRand(cellCount, numMines){
     const minePositions = new Array(cellCount).fill(false);
 
+
     for (let i=0; i<numMines; i++) {
       let randomIndex = Math.floor(Math.random() * cellCount);
+
         // without this often overlaps and implements less mines 
       while (minePositions[randomIndex]) {
         randomIndex = Math.floor(Math.random() * cellCount);
@@ -71,9 +95,10 @@ function addNumToAdjacentMines(cells, width, cellCount){
         const cell = cells[i];
         if(!cell.classList.contains('mine')){
             let count = 0;
+            //cell.style.color = transparent;
             // taking string value of div index to int 
             const cellIndex = parseInt(cell.dataset.index);
-
+            
         // checking board if board edges
             const isLeftEdge = (cellIndex % width === 0);
             const isRightEdge = (cellIndex % width === width -1);
@@ -92,26 +117,63 @@ function addNumToAdjacentMines(cells, width, cellCount){
             if(!isBottomEdge && !isLeftEdge && cells[cellIndex + width -1].classList.contains('mine')) count++;
             if(!isBottomEdge && !isRightEdge && cells[cellIndex + width + 1].classList.contains('mine')) count++;
 
-            if(count > 0) cell.textContent = count;
-            
+
+            // adding count to the global array 
+            if(count >= 0) {
+                
+                mineCounts[cellIndex] = count;
+                
+                } 
+                // adding mines to the global array 
+                cells.map((cell, index) => {
+                    if(cell.classList.contains('mine')){
+                        mineCounts[index] = 'mine';
+                    }
+                })    
         }
     }
 }
 
+
+function revealCell(cell, cellIndex, cells, width, cellCount){
+    const count = mineCounts[cellIndex];
+    // adding flood effect to the empty cells 
+    if(count === 0){
+        const cellIndex = parseInt(cell.dataset.index);
+        const isLeftEdge = (cellIndex % width === 0);
+        const isRightEdge = (cellIndex % width === width -1);
+        const isTopEdge = (cellIndex < width);
+        const isBottomEdge = (cellIndex >= cellCount - width);
+    }
+
+    function floodFill(index){
+        // range of the valid cells 
+        if(index => 0 && index < cellCount){
+            const adjacentCell = cells[index];
+            const adjacentCount = mineCounts[index];
+    
+            if(adjacentCell && adjacentCount === 0 && 
+                !adjacentCell.classList.contains('revealed')){
+                adjacentCell.classList.add('revealed');
+                floodFill(index -1);
+                floodFill(index +1);
+                floodFill(index - width);
+                floodFill(index + width);    
+            }
+        }
+    }
+
+    floodFill(cellIndex);
+}
+// recursion to open adjacent cells 
+
+
 function gameOver(square){
     if(square.classList.contains('mine')){
         alert('gameover');
-    } else {
-        console.log('clicked');
-    }
+    } 
 }
-// function gameOver(){
-//     const mine = element.classList.contains('mine');
-//     mine.addEventListener('click', function(){
-//         alert('boom!!!');
-//     });
-// }
-// function adjacentMinesNum(){
+
     
 // }
 // const mine = element.classList.contains('mine');
