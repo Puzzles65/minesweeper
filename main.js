@@ -8,7 +8,7 @@ function init(){
     // selecting the elements from html 
     const board = document.querySelector('.inner-board');
     // variables
-    const numMines = 15;
+    const numMines = 10;
     const height = 10;
     const width = 10;
     const cellCount = height * width;
@@ -54,14 +54,17 @@ function init(){
     cells.forEach((cell, index) => {
         cell.addEventListener('click', function() {
             if (mineCounts[index] === 0) {
-                revealCell(cell, index, cells, width, cellCount);
+                revealCell(index, cells, width, cellCount);
               }
-            if (!cell.classList.contains('revealed') && 
-          !cell.classList.contains('flagged')) {
+              //adding class revealed
+            if (!cell.classList.contains('revealed')) {
             cell.classList.add('revealed');
+
+            // adding the adjacent numbers to the board 
             if (mineCounts[index] !== 'mine' && mineCounts[index] !==0) {
               cell.textContent = mineCounts[index];
             }
+            
             
           }
         });
@@ -143,16 +146,7 @@ function addNumToAdjacentMines(cells, width, cellCount){
 }
 
 
-function revealCell(cell, cellIndex, cells, width, cellCount){
-    const count = mineCounts[cellIndex];
-    // adding flood effect to the empty cells 
-    if(count === 0){
-        const cellIndex = parseInt(cell.dataset.index);
-        const isLeftEdge = (cellIndex % width === 0);
-        const isRightEdge = (cellIndex % width === width -1);
-        const isTopEdge = (cellIndex < width);
-        const isBottomEdge = (cellIndex >= cellCount - width);
-    }
+function revealCell(cellIndex, cells, width, cellCount){
 
     function floodFill(index){
         // range of the valid cells 
@@ -176,12 +170,36 @@ function revealCell(cell, cellIndex, cells, width, cellCount){
 // recursion to open adjacent cells 
 
 
-function gameOver(square){
-    if(square.classList.contains('mine')){
-        alert('gameover');
-    } 
-}
-
+function gameOver(square) {
+    if (square.classList.contains('mine')) {
+      // Show all mines
+      const mines = document.querySelectorAll('.mine');
+      mines.forEach((mine) => {
+        mine.classList.add('revealed');
+        mine.classList.add('mine-revealed');
+      });
+  
+      // Reset the game
+      setTimeout(() => {
+        resetGame();
+        alert('Game Over!!!');
+      }, 100);
+    }
+  }
+  
+  function resetGame() {
+    // Clear the game board
+    const board = document.querySelector('.inner-board');
+    board.innerHTML = '';
+  
+    // Reset the mineCounts array
+    mineCounts.length = 0;
+  
+    // Call the init function to initialize a new game
+    setTimeout(() => {
+        init();
+      }, 1000);
+  }
     
 // }
 // const mine = element.classList.contains('mine');

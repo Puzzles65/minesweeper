@@ -13,6 +13,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: lightgrey;
   }
   
   .inner-board {
@@ -32,7 +33,12 @@
     flex-grow: 1;
   }
   
- 
+  .name {
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
+    background-color:  #d65a31;
+  }
 
   .inner-board>div:hover {
     color: lightgrey;
@@ -40,11 +46,13 @@
   }
 
   .inner-board .mine{
-    background-color: red;
+    background-color: grey;
   }
 
   .inner-board .revealed {
     background-color: green;
   }
 
-  
+  .mine-revealed {
+    background-color: red;
+  }  
