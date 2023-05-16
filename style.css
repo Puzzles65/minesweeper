@@ -28,12 +28,14 @@
   
   .inner-board>div {
     border: 1px solid black;
-    background-color: lightgrey;
+    background-color: grey;
     flex-grow: 1;
   }
+  
  
+
   .inner-board>div:hover {
-    color: darkgrey;
+    color: lightgrey;
     border-color: darkgrey;
   }
 
