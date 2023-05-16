@@ -42,3 +42,9 @@
   .inner-board .mine{
     background-color: red;
   }
+
+  .inner-board .revealed {
+    background-color: green;
+  }
+
+  

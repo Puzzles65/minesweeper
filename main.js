@@ -8,7 +8,7 @@ function init(){
     // selecting the elements from html 
     const board = document.querySelector('.inner-board');
     // variables
-    const numMines = 9;
+    const numMines = 15;
     const height = 10;
     const width = 10;
     const cellCount = height * width;
@@ -38,7 +38,7 @@ function init(){
                 cell.classList.add('mine');
               } 
 
-
+              
             
         }
     }
@@ -51,13 +51,21 @@ function init(){
     console.log(mineCounts);
 
     // adding event listeners to the global array 
-    mineCounts.forEach((count, index) => {
-        if(count !== 'mine'){
-            cells[index].addEventListener('click', function(){
-                revealCell(cells[index], index, cells, width, cellCount);
-            })
-        }
-    })
+    cells.forEach((cell, index) => {
+        cell.addEventListener('click', function() {
+            if (mineCounts[index] === 0) {
+                revealCell(cell, index, cells, width, cellCount);
+              }
+            if (!cell.classList.contains('revealed') && 
+          !cell.classList.contains('flagged')) {
+            cell.classList.add('revealed');
+            if (mineCounts[index] !== 'mine' && mineCounts[index] !==0) {
+              cell.textContent = mineCounts[index];
+            }
+            
+          }
+        });
+      });
     
     // event listener to the bomb 
     let squares = document.querySelectorAll('div');
