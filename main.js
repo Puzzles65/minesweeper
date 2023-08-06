@@ -144,28 +144,30 @@ function addNumToAdjacentMines(cells, width, cellCount){
 }
 
 
-function revealCell(cellIndex, cells, width, cellCount){
+function revealCell(cellIndex, cells, width, cellCount) {
+  function floodFill(index) {
+      if (index >= 0 && index < cellCount) {
+          const adjacentCell = cells[index];
+          const adjacentCount = mineCounts[index];
 
-    function floodFill(index){
-        // range of the valid cells 
-        if(index => 0 && index < cellCount){
-            const adjacentCell = cells[index];
-            const adjacentCount = mineCounts[index];
-    
-            if(adjacentCell && adjacentCount === 0 && 
-                !adjacentCell.classList.contains('revealed')){
-                adjacentCell.classList.add('revealed');
-                floodFill(index -1);
-                floodFill(index +1);
-                floodFill(index - width);
-                floodFill(index + width);    
-                
-            }
-        }
-    }
-
-    floodFill(cellIndex);
+          if (adjacentCell && !adjacentCell.classList.contains('revealed')) {
+              if (adjacentCount === 0) {
+                  adjacentCell.classList.add('revealed');
+                  floodFill(index - 1); // Left
+                  floodFill(index + 1); // Right
+                  floodFill(index - width); // Up
+                  floodFill(index + width); // Down
+                  
+              } else if (!adjacentCell.classList.contains('mine')) {
+                  adjacentCell.classList.add('revealed');
+                  adjacentCell.textContent = adjacentCount; // Display the number
+              }
+          }
+      }
+  }
+  floodFill(cellIndex);
 }
+
 // recursion to open adjacent cells 
 
 
