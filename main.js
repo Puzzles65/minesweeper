@@ -25,7 +25,7 @@ function init(){
             const cell = document.createElement('div');
             
             cell.dataset.index = i;
-  
+
             cell.style.height = `${100 / height}%`;
             cell.style.width = `${100 / width}%`;
             
@@ -78,8 +78,6 @@ function init(){
         })
     }
     
-// randomize mines 
-    console.log(cells);
     
 }
 // Functions
@@ -161,6 +159,7 @@ function revealCell(cellIndex, cells, width, cellCount){
                 floodFill(index +1);
                 floodFill(index - width);
                 floodFill(index + width);    
+                
             }
         }
     }
