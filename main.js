@@ -53,9 +53,16 @@ function init(){
     // adding event listeners to the global array 
     cells.forEach((cell, index) => {
         cell.addEventListener('click', function() {
+            if(cell.classList.contains('flag')){
+              return;
+            }
+
             if (mineCounts[index] === 0) {
                 revealCell(index, cells, width, cellCount);
-              }
+              } else if(mineCounts[index] === 'mine' && 
+              !cell.classList.contains('revealed')) {
+                gameOver(cell);
+              } 
               //adding class revealed
             if (!cell.classList.contains('revealed')) {
             cell.classList.add('revealed');
@@ -68,15 +75,15 @@ function init(){
             
           }
         });
-      });
-    
-    // event listener to the bomb 
-    let squares = document.querySelectorAll('div');
-    for(let i=0; i<squares.length; i++){
-        squares[i].addEventListener('click', function(){
-            gameOver(squares[i]);
+
+        // flag 
+        cell.addEventListener('contextmenu', function(e) {
+          e.preventDefault();
+          flag(cell);
         })
-    }
+
+      });
+      
     
     
 }
@@ -168,25 +175,42 @@ function revealCell(cellIndex, cells, width, cellCount) {
   floodFill(cellIndex);
 }
 
+// flag functionality
+
+function flag(cell) {
+    if(!cell.classList.contains('revealed')) {
+      const isFlagged = cell.dataset.flagged === 'true'; 
+      if (isFlagged) {
+          cell.dataset.flagged = false;
+          cell.classList.remove('flag');
+          cell.textContent = ''; 
+      } else {
+          cell.dataset.flagged = true;
+          cell.classList.add('flag');
+          cell.textContent = '🚩'; 
+      }
+  }
+}
+
 // recursion to open adjacent cells 
 
-
-function gameOver(square) {
-    if (square.classList.contains('mine')) {
-      // Show all mines
-      const mines = document.querySelectorAll('.mine');
+function gameOver(clickedCell) {
+  if (clickedCell.classList.contains('mine') && !clickedCell.classList.contains('flag')) {
+      // Show all unflagged mines
+      const mines = document.querySelectorAll('.mine:not(.flag)');
       mines.forEach((mine) => {
-        mine.classList.add('revealed');
-        mine.classList.add('mine-revealed');
+          mine.classList.add('revealed');
+          mine.classList.add('mine-revealed');
       });
-  
+
       // Reset the game
       setTimeout(() => {
-        resetGame();
-        alert('Game Over!!!');
+          resetGame();
+          alert('Game Over!!!');
       }, 100);
-    }
   }
+}
+
   
   function resetGame() {
     // Clear the game board
