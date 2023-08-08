@@ -29,7 +29,7 @@
   
   .inner-board>div {
     border: 1px solid black;
-    background-color: grey;
+    background-color: rgb(104, 99, 99);
     flex-grow: 1;
   }
   
@@ -45,12 +45,8 @@
     border-color: darkgrey;
   }
 
-  .inner-board .mine{
-    background-color: grey;
-  }
-
   .inner-board .revealed {
-    background-color: green;
+    background-color: #999999;
   }
 
   .inner-board .mine-revealed {

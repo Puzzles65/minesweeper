@@ -114,6 +114,8 @@ function addNumToAdjacentMines(cells, width, cellCount){
             //cell.style.color = transparent;
             // taking string value of div index to int 
             const cellIndex = parseInt(cell.dataset.index);
+
+           
             
         // checking board if board edges
             const isLeftEdge = (cellIndex % width === 0);
@@ -133,7 +135,9 @@ function addNumToAdjacentMines(cells, width, cellCount){
             if(!isBottomEdge && !isLeftEdge && cells[cellIndex + width -1].classList.contains('mine')) count++;
             if(!isBottomEdge && !isRightEdge && cells[cellIndex + width + 1].classList.contains('mine')) count++;
 
-
+            if (count >= 1 && count <= 4) {
+              cell.style.color = getAdjacentNumberColor(count);
+          }
             // adding count to the global array 
             if(count >= 0) {
                 
@@ -146,6 +150,7 @@ function addNumToAdjacentMines(cells, width, cellCount){
                         mineCounts[index] = 'mine';
                     }
                 })    
+                
         }
     }
 }
@@ -201,6 +206,7 @@ function gameOver(clickedCell) {
       mines.forEach((mine) => {
           mine.classList.add('revealed');
           mine.classList.add('mine-revealed');
+          mine.textContent = 	'💣';
       });
 
       // Reset the game
@@ -225,6 +231,22 @@ function gameOver(clickedCell) {
         init();
       }, 1000);
   }
+
+  function getAdjacentNumberColor(count) {
+    switch (count) {
+        case 1:
+            return 'blue';
+        case 2:
+            return 'green';
+        case 3:
+            return 'yellow';
+        case 4:
+            return 'red';
+        default:
+            return '';
+    }
+}
+
     
 // }
 // const mine = element.classList.contains('mine');
