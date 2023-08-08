@@ -4,6 +4,7 @@
 // global array 
 const mineCounts = [];
 //const minePositions = [];
+const cells=[];
 function init(){
     // selecting the elements from html 
     const board = document.querySelector('.inner-board');
@@ -12,7 +13,7 @@ function init(){
     const height = 10;
     const width = 10;
     const cellCount = height * width;
-    const cells = [];
+    //const cells = [];
     
     const minePositions = minesRand(cellCount, numMines);
     
@@ -21,27 +22,24 @@ function init(){
 
         
 
-        for(let i=0; i<cellCount; i++){
-            const cell = document.createElement('div');
-            
-            cell.dataset.index = i;
+      for(let i=0; i<cellCount; i++){
+          const cell = document.createElement('div');
+          
+          cell.dataset.index = i;
 
-            cell.style.height = `${100 / height}%`;
-            cell.style.width = `${100 / width}%`;
-            
+          cell.style.height = `${100 / height}%`;
+          cell.style.width = `${100 / width}%`;
+          
 
-            board.appendChild(cell);
-            cells.push(cell);
-            
-            // adding mine 
-            if (minePositions[i]) {
-                cell.classList.add('mine');
-              } 
-
-              
-            
-        }
-    }
+          board.appendChild(cell);
+          cells.push(cell);
+          
+          // adding mine 
+          if (minePositions[i]) {
+              cell.classList.add('mine');
+            } 
+      }
+  }
 
       
     createBoard();
@@ -84,10 +82,13 @@ function init(){
 
       });
       
-    
+      const playAgainButton = document.querySelector('.play-again-button');
+      playAgainButton.addEventListener('click', resetGame);
+      
     
 }
 // Functions
+
 function minesRand(cellCount, numMines){
     const minePositions = new Array(cellCount).fill(false);
 
@@ -178,6 +179,7 @@ function revealCell(cellIndex, cells, width, cellCount) {
       }
   }
   floodFill(cellIndex);
+  checkWinCondition();
 }
 
 // flag functionality
@@ -218,19 +220,38 @@ function gameOver(clickedCell) {
 }
 
   
-  function resetGame() {
-    // Clear the game board
-    const board = document.querySelector('.inner-board');
-    board.innerHTML = '';
-  
-    // Reset the mineCounts array
-    mineCounts.length = 0;
-  
-    // Call the init function to initialize a new game
-    setTimeout(() => {
-        init();
-      }, 1000);
+function resetGame() {
+
+  const winModal = document.querySelector('.win-modal');
+  if (winModal) {
+      winModal.style.display = 'none';
   }
+  // Clear the game board
+  const board = document.querySelector('.inner-board');
+  board.innerHTML = '';
+
+  // Clear the cells array
+  cells.length = 0;
+
+  // Reset mineCounts array
+  mineCounts.length = 0;
+
+  // Initialize the game again
+  setTimeout(() => {
+      init();
+  }, 100);
+}
+
+
+function checkWinCondition() {
+  const nonMineCells = cells.filter(cell => !cell.classList.contains('mine'));
+  const allNonMineRevealed = nonMineCells.every(cell => cell.classList.contains('revealed'));
+  if (allNonMineRevealed) {
+      const winModal = document.querySelector('.win-modal');
+      winModal.style.display = 'flex';
+  }
+}
+
 
   function getAdjacentNumberColor(count) {
     switch (count) {
