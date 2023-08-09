@@ -210,12 +210,11 @@ function gameOver(clickedCell) {
           mine.classList.add('mine-revealed');
           mine.textContent = 	'💣';
       });
+      const modal = document.getElementById('gameOverModal');
+      modal.style.display = 'flex';
 
-      // Reset the game
-      setTimeout(() => {
-          resetGame();
-          alert('Game Over!!!');
-      }, 100);
+      const playAgainButton = modal.querySelector('.play-again-button2');
+      playAgainButton.addEventListener('click', resetGame);
   }
 }
 
@@ -223,9 +222,11 @@ function gameOver(clickedCell) {
 function resetGame() {
 
   const winModal = document.querySelector('.win-modal');
-  if (winModal) {
-      winModal.style.display = 'none';
-  }
+  winModal.style.display = 'none';
+  
+  
+  const modal = document.getElementById('gameOverModal');
+  modal.style.display = 'none';
   // Clear the game board
   const board = document.querySelector('.inner-board');
   board.innerHTML = '';
