@@ -34,7 +34,7 @@
   }
 
   .inner-board .mine {
-    background-color: orange;
+    background-color: rgb(116, 113, 113);
   }
   
   .name {

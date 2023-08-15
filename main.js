@@ -3,7 +3,6 @@
 
 // global array 
 const mineCounts = [];
-//const minePositions = [];
 const cells=[];
 function init(){
     // selecting the elements from html 
@@ -19,34 +18,31 @@ function init(){
     
     // create game board
     function createBoard(){
-
-        
-
       for(let i=0; i<cellCount; i++){
-          const cell = document.createElement('div');
-          
-          cell.dataset.index = i;
+      const cell = document.createElement('div');
+      
+      cell.dataset.index = i;
 
-          cell.style.height = `${100 / height}%`;
-          cell.style.width = `${100 / width}%`;
-          
-
-          board.appendChild(cell);
-          cells.push(cell);
-          
-          // adding mine 
-          if (minePositions[i]) {
-              cell.classList.add('mine');
-            } 
-      }
+      cell.style.height = `${100 / height}%`;
+      cell.style.width = `${100 / width}%`;
+      
+      board.appendChild(cell);
+      cells.push(cell);
+      
+      // adding mine 
+      if (minePositions[i]) {
+          cell.classList.add('mine');
+        } 
   }
+}
+
 
       
     createBoard();
     addNumToAdjacentMines(cells, width, cellCount);
     
 
-    console.log(mineCounts);
+    //console.log(mineCounts);
 
     // adding event listeners to the global array 
     cells.forEach((cell, index) => {
@@ -220,10 +216,8 @@ function gameOver(clickedCell) {
 
   
 function resetGame() {
-
   const winModal = document.querySelector('.win-modal');
   winModal.style.display = 'none';
-  
   
   const modal = document.getElementById('gameOverModal');
   modal.style.display = 'none';
