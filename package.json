@@ -3,6 +3,17 @@
     "express": "^4.18.2"
   },
   "scripts": {
-    "start": "node server.js"
-  }
+    "start": "open index.html"
+  },
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "main": "main.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "engines": {
+    "node": "20.x"
+  }  
 }
+
