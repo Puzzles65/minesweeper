@@ -290,6 +290,4 @@ function checkWinCondition() {
 // add timer?
 
 // calling init function
-if (typeof window !== 'undefined') {
-  window.addEventListener('DOMContentLoaded', init);
-}
+window.addEventListener('DOMContentLoaded', init);
